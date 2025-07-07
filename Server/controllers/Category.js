@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+
 exports.createCategory = async (req, res) => {
   try {
     // Fetch Data
@@ -52,6 +53,9 @@ exports.showAllcategory = async (req, res) => {
   }
 };
 
+
+
+// GoThrough
 exports.categoryPageDetails = async (req, res) => {
   try {
     const { categoryId } = req.body;

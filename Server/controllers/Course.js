@@ -175,3 +175,157 @@ exports.getCourseDetails = async (req, res) => {
     });
   }
 };
+
+
+// Go Through from here 
+exports.showAllCourses=async(req,res)=>{
+    try{
+          const allCourses=await Course.find({});
+        
+
+return res.status(200).json({
+    success:true,
+    message:'Data for all course fetch successfully',
+    data:allCourses,
+})
+    }
+    catch(error){
+        console.error(error);
+        return res.status(500).json({
+          success:false,
+          message:'Failed to create new course',
+          error:error.message,
+        })
+    }
+}
+
+exports.getInstructorCourses = async (req, res) => {
+    try {
+        const instructorId = req.user.id; // Get the instructor ID from the authenticated user or request body
+  
+        // Find all courses belonging to the instructor
+        const instructorCourses = await Course.find({ instructor: instructorId }).sort({ createdAt: -1 });
+        
+        // Return the instructor's courses
+        res.status(200).json({                     
+            success: true,
+            data: instructorCourses,
+        });
+    } catch (error) {
+        // If an error occurs, send an error response
+        res.status(500).json({
+            success: false,
+            message: "Failed to retrieve instructor courses",
+            error: error.message,
+        });
+    }
+};
+
+
+exports.deleteCourse = async (req, res) => {
+    try {
+      const { courseId } = req.body
+      
+      const course = await Course.findById(courseId)                     // Find the course
+      if(!course){
+        return res.status(404).json({ message: "Course not found" })
+      }
+  
+      const studentsEnrolled = course.studentsEnrolled                   // Unenroll students from the course
+      for(const studentId of studentsEnrolled){
+        await User.findByIdAndUpdate(studentId, {$pull: { courses: courseId },})
+      }
+  
+      const courseSections = course.courseContent                   // Delete sections and sub-sections
+      for(const sectionId of courseSections) {
+        const section = await Section.findById(sectionId)             // Delete sub-sections of the section
+        if(section) {
+          const subSections = section.subSection
+          for (const subSectionId of subSections) {
+            await SubSection.findByIdAndDelete(subSectionId)
+          }
+        }
+        await Section.findByIdAndDelete(sectionId)           // Delete the section
+      }
+  
+      await Course.findByIdAndDelete(courseId)                  // Delete the course
+  
+      return res.status(200).json({
+        success: true,
+        message: "Course deleted successfully",
+      })
+    }
+     catch (error) {
+      console.error(error)
+      return res.status(500).json({
+        success: false,
+        message: "Server error",
+        error: error.message,
+      })
+    }
+  }  
+
+
+  exports.getFullCourseDetails = async (req, res) => {
+    try {
+      const { courseId } = req.params
+      const userId = req.user.id
+      console.log("courseId",courseId);
+      console.log("userId",userId);
+      const courseDetails = await Course.findOne({ _id: courseId, })
+      .populate({
+        path: "instructor",
+        populate: {
+          path: "additionalDetails",
+        },
+      })
+      .populate("category")
+      .populate("ratingAndReviews")
+      .populate({
+        path: "courseContent",
+        populate: {
+          path: "subSection",
+        },
+      })
+      .exec();
+                          console.log("courseDetails",courseDetails);
+  
+      let courseProgressCount = await CourseProgress.findOne({courseID: courseId,  userId: userId,})
+
+      console.log("courseProgressCount",courseProgressCount);
+  
+      if(!courseDetails){
+        return res.status(400).json({
+          success: false,
+          message: `Could not find course with id: ${courseId}`,
+        })
+      }
+  
+      let totalDurationInSeconds = 0
+      courseDetails.courseContent.forEach((content) => {
+        content.subSection.forEach((subSection) => {
+          const timeDurationInSeconds = parseInt(subSection.timeDuration)
+          totalDurationInSeconds += timeDurationInSeconds
+        })
+      })
+  
+      const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
+
+      console.log("totalDuration:",totalDuration);
+  
+      return res.status(200).json({
+        success: true,
+        data: {
+          courseDetails,
+          totalDuration,
+          completedVideos: courseProgressCount?.completedVideos ? courseProgressCount?.completedVideos : [], 
+        },
+      })
+    } 
+    catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      })
+    }
+  }
