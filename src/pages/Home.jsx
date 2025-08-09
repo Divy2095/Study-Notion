@@ -55,12 +55,13 @@ const Home = () => {
 
         {/* Code Section 1 */}
         <div className="w-2/3">
+          <div className="circlePostion w-[260px] h-[300px] bg-blue-400 rounded-[100%] absolute z-1 top-[50%] left-[35%] translate-x-[-100%] translate-y-[-40%] blur-[90px] opacity-55"></div>
           <CodeBlocks
             position={"lg:flex-row"}
             heading={
               <div className="text-4xl font-semibold">
                 Unlock Your
-                <HighlightText text={"Coding Potential"} />
+                <HighlightText text={" Coding Potential"} />
                 with our online courses
               </div>
             }
@@ -95,12 +96,13 @@ const Home = () => {
         </div>
 
         <div className="w-2/3">
+          <div className="circlePostion w-[260px] h-[300px] bg-blue-400 rounded-[100%] absolute z-1 top-[62%] left-[80%] translate-x-[-100%] translate-y-[50%] blur-[90px] opacity-55"></div>
           <CodeBlocks
             position={"lg:flex-row-reverse"}
             heading={
               <div className="text-4xl font-semibold">
-                Unlock Your
-                <HighlightText text={"Coding Potential"} />
+                Unlock My
+                <HighlightText text={" Coding Potential "} />
                 with our online courses
               </div>
             }

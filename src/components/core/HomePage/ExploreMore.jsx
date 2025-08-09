@@ -53,14 +53,14 @@ const ExploreMore = () => {
       {/* Course Card (3) */}
       <div className="absolute flex flex-row gap-10 justify-between w-full">
         {courses.map((element, index) => {
-          return (
-            <CourseCard
-              key={index}
-              cardData={element}
-              currentCard={currentCard}
-              setCurrentCard={setCurrentCard}
-            />
-          );
+          // return (
+          //   <CourseCard
+          //     key={index}
+          //     cardData={element}
+          //     currentCard={currentCard}
+          //     setCurrentCard={setCurrentCard}
+          //   />
+          // );
         })}
       </div>
     </div>

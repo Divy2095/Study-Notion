@@ -15,9 +15,10 @@ const CodeBlocks = ({
   codeColor,
 }) => {
   return (
-    <div className={`flex ${position} my-20 justify-between gap-10 `}>
+    <div className={`flex ${position} my-20 justify-between gap-10`}>
       {/* Section 1 */}
-      <div className="w-[50%] flex flex-col gap-8">
+      <div className="w-[50%] flex flex-col gap-8 border-2 rounded-2xl border-richblack-500 p-5">
+      {/* <div className="circlePostion w-[260px] h-[300px] bg-blue-400 rounded-[100%] absolute z-1 top-[50%] left-[35%] translate-x-[-100%] translate-y-[-40%] blur-[90px] opacity-45"></div> */}
         {heading}
         <div className="text-richblack-300 font-bold">{subheading}</div>
 
@@ -53,7 +54,9 @@ const CodeBlocks = ({
           <p>12</p>
           <p>13</p>
         </div>
-        <div className={`w-[90%] flex flex-col gap-2 font-bold font-mono ${codeColor} pr-2`}>
+        <div
+          className={`w-[90%] flex flex-col gap-2 font-bold font-mono ${codeColor} pr-2`}
+        >
           <TypeAnimation
             sequence={[codeblock, 2000, ""]}
             repeat={Infinity}
