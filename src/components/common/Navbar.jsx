@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { TiShoppingCart } from "react-icons/ti";
 import ProfileDropDown from "../core/Auth/ProfileDropDown";
 import { apiConnector } from "../../services/apiconnector";
-import { catagories } from "../../services/apis";
+import { categories } from "../../services/apis";
 import { IoIosArrowDown } from "react-icons/io";
 
 const subLinks = [
@@ -67,15 +67,15 @@ const Navbar = () => {
                     <IoIosArrowDown />
                     <div className="invisible absolute left-[50%] top-[50%] flex flex-col rounded-md bg-richblack-5 p-4 text-richblack-900 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 lg:w-[300px] translate-x-[-15%] translate-y-[50%]">
                       <div className="absolute left-[21%] top-[0%] h-6 w-8 rotate-45 rounded bg-richblack-5 "></div>
-                      {
-                        subLinks.length? (
-                          subLinks.map((subLink,index) => (
-                            <Link to={`${subLink.link}`} key={index}>
-                              <p>{subLink.title}</p>
-                            </Link>
-                          ))
-                        ) : (<div></div>)
-                      }
+                      {subLinks.length ? (
+                        subLinks.map((subLink, index) => (
+                          <Link to={`${subLink.link}`} key={index}>
+                            <p>{subLink.title}</p>
+                          </Link>
+                        ))
+                      ) : (
+                        <div></div>
+                      )}
                     </div>
                   </div>
                 ) : (
